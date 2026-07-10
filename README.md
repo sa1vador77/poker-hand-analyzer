@@ -1,5 +1,7 @@
 # poker-hand-analyzer
 
+[![CI](https://github.com/sa1vador77/poker-hand-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/sa1vador77/poker-hand-analyzer/actions/workflows/ci.yml)
+
 An offline Texas Hold'em hand analyzer for study and review — in the spirit of hand
 trackers and solvers. Feed it a screenshot of a hand log (or a ready-made hand state)
 and it reconstructs the hand, computes equities against modeled opponent ranges and
@@ -61,6 +63,28 @@ uv sync                                  # environment + native _equity module b
 uv run poker-analyzer screenshot.png     # parse a hand-log screenshot
 uv run poker-analyzer screenshot.png --dump   # dump per-stage crops to debug/ (calibration)
 ```
+
+### Example
+
+Input — a hand-log screenshot ([`docs/example-log.png`](docs/example-log.png),
+nicknames replaced for privacy):
+
+![example hand log](docs/example-log-crop.png)
+
+Output — one parsed event per log row (`время` time, `слово` keyword, `игрок` player id,
+`сумма` amount):
+
+```
+$ uv run poker-analyzer docs/example-log.png
+Строка  1: время=04:46:35 слово=blind игрок=0 сумма=— карты=—
+Строка  2: время=04:46:35 слово=blind игрок=1 сумма=— карты=—
+Строка  3: время=04:46:35 слово=call  игрок=2 сумма=20 карты=—
+Строка  4: время=04:46:37 слово=raise игрок=1 сумма=181 карты=—
+Строка  5: время=04:46:46 слово=call  игрок=0 сумма=181 карты=—
+```
+
+Players are told apart purely by the *image* of their nickname — Bob is `0`, Carol is `1`,
+Alice is `2` — and these events feed `HandState` + the advisor downstream.
 
 Layout coordinates and matching thresholds live in `src/poker_analyzer/config.py`
 (`Layout`, `Thresholds`) and are calibrated per log window size. Recognition templates
