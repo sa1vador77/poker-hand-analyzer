@@ -34,7 +34,7 @@ No live table connection: everything works on static input.
   atlas) — no text recognition of names is needed, only stable per-player identity.
 - **Board texture analysis** (monotone / two-tone / connectedness / paired / broadway)
   feeding the range-narrowing thresholds.
-- **Live calibration via `.env`.** All poker constants (ranges, narrowing thresholds,
+- **Runtime calibration via `.env`.** All poker constants (ranges, narrowing thresholds,
   realization multipliers, value-bet margins) have sane defaults in code and can be
   overridden without touching code — see `.env.example` for the full annotated key list.
 
