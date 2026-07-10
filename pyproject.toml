@@ -3,6 +3,8 @@ name = "poker-hand-analyzer"
 version = "0.1.0"
 description = "Offline Texas Hold'em hand analyzer: equity engine (C++/nanobind), range model, preflop charts and CV-based table-state recognition from static screenshots."
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
 dependencies = [
     "numpy>=2.1",

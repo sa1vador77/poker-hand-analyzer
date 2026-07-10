@@ -105,6 +105,10 @@ uv run pytest                             # 226 tests: engine, vision, parsing, 
 Editing `.py` files is picked up immediately; editing `native/*.cpp` requires `uv sync`
 to rebuild the module.
 
+## License
+
+MIT — see [LICENSE](LICENSE).
+
 ## Notes
 
 - Code comments and log messages are in Russian; identifiers are English.
