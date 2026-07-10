@@ -1,0 +1,39 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# --- Окружения / uv ---
+.venv/
+# uv.lock коммитим — он фиксирует воспроизводимое окружение.
+
+# --- Кэши инструментов ---
+.ruff_cache/
+.ty_cache/
+.pytest_cache/
+.mypy_cache/
+
+# --- IDE ---
+.vscode/
+.idea/
+
+# --- macOS ---
+.DS_Store
+
+# --- C++ / нативные расширения ---
+*.so
+*.pyd
+*.dylib
+# compile_commands.json генерится CMake в корень для IntelliSense — локальный, у каждого свои пути
+compile_commands.json
+
+# --- Локальные артефакты ---
+*.log
+debug/
+# Локальные скриншоты для разбора — не публикуем
+data/screens/
+# Локальная калибровка (см. .env.example)
+.env

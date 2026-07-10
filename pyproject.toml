@@ -1,0 +1,89 @@
+[project]
+name = "poker-hand-analyzer"
+version = "0.1.0"
+description = "Offline Texas Hold'em hand analyzer: equity engine (C++/nanobind), range model, preflop charts and CV-based table-state recognition from static screenshots."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.1",
+    "opencv-python>=4.13",
+]
+
+[project.scripts]
+poker-analyzer = "poker_analyzer.cli:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "ty>=0.0.1a1",
+    "pytest>=8.0",
+    # build-инструменты и в .venv — чтобы заголовки nanobind лежали по стабильному пути
+    # (для IntelliSense через compile_commands.json; см. [tool.uv] ниже).
+    "scikit-build-core>=0.10",
+    "nanobind>=2.0",
+]
+
+[tool.uv]
+# Собирать сам проект без изоляции — использовать nanobind/scikit-build-core из .venv.
+# Тогда compile_commands.json ссылается на стабильные пути, а не на временный build-env.
+no-build-isolation-package = ["poker-hand-analyzer"]
+
+[build-system]
+requires = ["scikit-build-core>=0.10", "nanobind>=2.0"]
+build-backend = "scikit_build_core.build"
+
+# Сборка нативного модуля _equity (C++/nanobind) через CMake. nanobind — только
+# build-зависимость: в рантайме не нужна, линкуется внутрь модуля.
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+wheel.packages = ["src/poker_analyzer"]
+
+# --- Ruff: линтер + форматтер -------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle
+    "F",       # pyflakes
+    "I",       # isort (сортировка импортов)
+    "N",       # pep8-naming
+    "UP",      # pyupgrade (современный синтаксис)
+    "B",       # flake8-bugbear (частые баги)
+    "C4",      # flake8-comprehensions
+    "SIM",     # flake8-simplify
+    "PTH",     # flake8-use-pathlib
+    "RUF",     # ruff-specific
+]
+ignore = [
+    "E501",     # длину строк держит форматтер, отдельно не ругаемся
+    "RUF001",   # «неоднозначные» юникод-символы в строках — у нас всё по-русски
+    "RUF002",   # то же для докстрингов
+    "RUF003",   # то же для комментариев
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["poker_analyzer"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+# --- ty: проверка типов (Astral) ---------------------------------------------
+[tool.ty.environment]
+python-version = "3.13"
+
+[tool.ty.src]
+include = ["src", "tests"]
+
+[tool.ty.rules]
+# У cv2 слабые/динамические стабы — не падаем из-за неразрешённых имён.
+unresolved-attribute = "warn"
+unresolved-import = "warn"
+
+# --- pytest -------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
